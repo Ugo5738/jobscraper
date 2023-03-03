@@ -107,18 +107,18 @@ def scrape_remote_co():
 
         db.session.commit()
 
-        # one_job_dict = {}
-        # one_job_dict["Job Title"] = title
-        # one_job_dict["Job Company Name"] = job_company_name
-        # one_job_dict["Job Tags"] = job_tags
-        # one_job_dict["Logo"] = logo_url
-        # one_job_dict["Job Description"] = job_description
-        # one_job_dict["Location"] = location
-        # # one_job_dict["Category"] = category
-        # # one_job_dict["Salary Range"] = salary_range
-        # one_job_dict["Posted Date"] = posted_date
+        one_job_dict = {}
+        one_job_dict["Job Title"] = title
+        one_job_dict["Job Company Name"] = job_company_name
+        one_job_dict["Job Tags"] = job_tags
+        one_job_dict["Logo"] = logo_url
+        one_job_dict["Job Description"] = job_description
+        one_job_dict["Location"] = location
+        # one_job_dict["Category"] = category
+        # one_job_dict["Salary Range"] = salary_range
+        one_job_dict["Posted Date"] = posted_date
 
-        # jobs_dict[f"job_{i+1}"] = one_job_dict
+        jobs_dict[f"job_{i+1}"] = one_job_dict
 
         # Click on the next link, unless this is the last link in the list
         if i < len(job_links) - 1:
@@ -127,7 +127,8 @@ def scrape_remote_co():
             time.sleep(2)  # Add a delay to allow the page to load
 
     driver.quit()
-    return "done"
+    # return "done"
+    return jobs_dict
 
 
 # print("Ending...")

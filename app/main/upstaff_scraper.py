@@ -17,7 +17,6 @@ from app.models.postings import posts
 
 
 def scrape_upstaff():
-    print("started upstaff")
     jobs_dict = {}
     date_dict = {}
     job_links = []
@@ -109,17 +108,17 @@ def scrape_upstaff():
         db.session.add(new_post)
         db.session.commit()
 
-        # one_job_dict["Job Title"] = title
-        # one_job_dict["Job Company Name"] = job_company_name
-        # # one_job_dict["Job Tags"] = job_tags
-        # one_job_dict["Logo"] = logo_url
-        # one_job_dict["Job Description"] = job_description_text
-        # one_job_dict["Location"] = location
-        # one_job_dict["Category"] = category
-        # # one_job_dict["Salary Range"] = salary_range
-        # one_job_dict["Posted Date"] = date_dict[title]
+        one_job_dict["Job Title"] = title
+        one_job_dict["Job Company Name"] = job_company_name
+        # one_job_dict["Job Tags"] = job_tags
+        one_job_dict["Logo"] = logo_url
+        one_job_dict["Job Description"] = job_description_text
+        one_job_dict["Location"] = location
+        one_job_dict["Category"] = category
+        # one_job_dict["Salary Range"] = salary_range
+        one_job_dict["Posted Date"] = date_dict[title]
 
-        # jobs_dict[f"job_{i+1}"] = one_job_dict
+        jobs_dict[f"job_{i+1}"] = one_job_dict
 
         # Click on the next link, unless this is the last link in the list
         if i < len(job_links) - 1:
@@ -129,6 +128,6 @@ def scrape_upstaff():
 
     time.sleep(5)
     driver.quit()
-    return "done"
+    # return "done"
 
-    # return jobs_dict
+    return jobs_dict
