@@ -27,7 +27,18 @@ def scrape_remote_io():
     service = Service(DRIVER_PATH)
     driver = webdriver.Chrome(service=service, options=options)
     driver.get(WEB_URL)
-
+    # check if the blocking element exists
+    try:
+        blocking_element = WebDriverWait(driver, 5).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, ".jsx-3911492254"))
+        )
+        # click the button to cancel the blocking element
+        cancel_button = blocking_element.find_element_by_css_selector(
+            "[data-modal-close-target='modal-alert-subscribe']"
+        )
+        cancel_button.click()
+    except:
+        pass
     # Find the search box
     select_element = WebDriverWait(driver, 2).until(
         EC.presence_of_element_located((By.ID, "job-search-category"))

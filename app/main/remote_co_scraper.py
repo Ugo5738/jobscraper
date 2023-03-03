@@ -36,7 +36,7 @@ def scrape_remote_co():
     print(f"Elapsed time for page load 1: {elapsed_time/60:.2f} minutes")
 
     start_timer = time.monotonic()
-    developer_link = WebDriverWait(driver, 2).until(
+    developer_link = WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.XPATH, "//a[contains(@href,'/remote-jobs/developer/')]"))
     )
     developer_link.click()

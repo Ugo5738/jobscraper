@@ -32,31 +32,31 @@ def create_app(config_class=Config):
     def load_user(user_id):
         return admin_models.User.query.get(int(user_id))
 
-    # @click.command(name="scrape")
-    # @with_appcontext
-    # def scrape():
-    #     """
-    #     function to scrape remoteco, remoteio, upstaff for:
-    #     - job_title
-    #     - job_company_name
-    #     - job_tags
-    #     - job_description_dict
-    #     - location
-    #     - category
-    #     - salary_range
-    #     """
+    @click.command(name="scrape")
+    @with_appcontext
+    def scrape():
+        """
+        function to scrape remoteco, remoteio, upstaff for:
+        - job_title
+        - job_company_name
+        - job_tags
+        - job_description_dict
+        - location
+        - category
+        - salary_range
+        """
 
-    #     print("Scrape started...")
-    #     result1 = remote_co_scraper.scrape_remote_co()
-    #     print(result1)
-    #     time.sleep(10)
-    #     result2 = remote_io_scraper.scrape_remote_io()
-    #     print(result2)
-    #     time.sleep(10)
-    #     result3 = upstaff_scraper.scrape_upstaff()
-    #     print(result3)
-    #     time.sleep(10)
-    #     print("...Scraped")
+        print("Scrape started...")
+        result1 = remote_io_scraper.scrape_remote_io()
+        print(result1)
+        time.sleep(10)
+        result2 = remote_co_scraper.scrape_remote_co()
+        print(result2)
+        time.sleep(10)
+        result3 = upstaff_scraper.scrape_upstaff()
+        print(result3)
+        time.sleep(10)
+        print("...Scraped")
 
     # Register blueprints
     from app.auth import bp as auth_bp
@@ -93,16 +93,16 @@ def create_app(config_class=Config):
         )
     )
 
-    # app.cli.add_command(scrape)
+    app.cli.add_command(scrape)
 
     with app.app_context():
         db.create_all()
 
-        from app.models.admin.admin_models import User
+        # from app.models.admin.admin_models import User
 
-        user = User(name="dan", email="daniel@gmail.com", password="daniel")
-        db.session.add(user)
-        db.session.commit()
+        # user = User(name="dan", email="daniel@gmail.com", password="daniel")
+        # db.session.add(user)
+        # db.session.commit()
         # db.drop_all()
 
     return app
