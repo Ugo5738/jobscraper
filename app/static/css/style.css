@@ -1,0 +1,41 @@
+.login-panel {
+    position: fixed;
+    right: 50px;
+    bottom: 30px;
+    padding: 10px;
+}
+
+.login-panel button:hover {
+    background-color: #3232BD; 
+}
+
+.login-panel button:active {
+    background-color: #0A0A95; 
+}
+
+.welcome {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.welcome h1 {
+    color: blue;
+    margin-bottom: 20px;
+}
+
+.welcome button {
+    margin: auto;
+}
+
+.welcome button:hover {
+    background-color: #3232BD; 
+}
+
+.welcome button:active {
+    background-color: #0A0A95; 
+}
