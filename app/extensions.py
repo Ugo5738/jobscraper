@@ -17,4 +17,5 @@ admin = Admin(
 )
 login_manager = LoginManager()
 migrate = Migrate()
+# not using this yet
 mail = Mail()
