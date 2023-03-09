@@ -12,6 +12,11 @@ from app.models.postings import posts
 
 
 @bp.route("/get-scraped/<website_name>", methods=["GET", "POST"])
+def index():
+    return "app running"
+
+
+@bp.route("/get-scraped/<website_name>", methods=["GET", "POST"])
 def get_scraped(website_name):
     if website_name == "remoteio":
         web_name = "Remote IO"
