@@ -25,7 +25,7 @@ def scrape_remote_co():
     WEB_URL = "https://remote.co"
 
     options = Options()
-    # options.add_argument("--headless")
+    options.add_argument("--headless")
     service = Service(DRIVER_PATH)
     driver = webdriver.Chrome(service=service, options=options)
 

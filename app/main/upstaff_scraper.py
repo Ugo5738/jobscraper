@@ -29,7 +29,7 @@ def scrape_upstaff():
     WEB_URL = "https://up2staff.com/"
 
     options = Options()
-    # options.add_argument("--headless")
+    options.add_argument("--headless")
     service = Service(DRIVER_PATH)
     driver = webdriver.Chrome(service=service, options=options)
     driver.get(WEB_URL)

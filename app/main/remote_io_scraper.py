@@ -36,7 +36,7 @@ def scrape_remote_io():
     WEB_URL = "https://www.remote.io"
 
     options = Options()
-    # options.add_argument("--headless")
+    options.add_argument("--headless")
     service = Service(DRIVER_PATH)
     driver = webdriver.Chrome(service=service, options=options)
     driver.get(WEB_URL)
