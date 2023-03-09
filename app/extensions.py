@@ -10,7 +10,8 @@ from app.custom_classes import MyAdminIndexView
 db = SQLAlchemy()
 admin = Admin(
     name="JOB SCRAPER",
-    url="/admin",
+    # url="/admin",
+    url="/",
     template_mode="bootstrap4",
     index_view=MyAdminIndexView(),  # name="Home", template="admin/home.html", url="/admin"),
 )

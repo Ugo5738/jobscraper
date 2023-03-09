@@ -5,7 +5,6 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from app.auth import bp
 from app.extensions import db
 from app.models.admin import admin_models
-from app.models.postings import posts
 
 # from app.forms.auth import LoginForm, SignUpForm
 

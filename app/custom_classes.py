@@ -34,7 +34,7 @@ class PostAdminView(MyModelView):
         "location",
         "category",
         "salary_range",
-        "post_date",
+        "post_time",
         "fill_date",
     ]
     column_searchable_list = ["website_name", "job_title", "job_company_name", "category"]
@@ -45,7 +45,7 @@ class PostAdminView(MyModelView):
         "location",
         "category",
         "salary_range",
-        "post_date",
+        "post_time",
         "fill_date",
     ]
     form_columns = form_columns = [
@@ -57,7 +57,7 @@ class PostAdminView(MyModelView):
         "location",
         "category",
         "salary_range",
-        "post_date",
+        "post_time",
         "fill_date",
     ]
 

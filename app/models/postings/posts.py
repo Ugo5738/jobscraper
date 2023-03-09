@@ -13,7 +13,7 @@ class Post(db.Model):
     location = db.Column(db.String(100))
     category = db.Column(db.String(100))
     salary_range = db.Column(db.String(100))
-    post_date = db.Column(db.String(100))
+    post_time = db.Column(db.String(100))
     fill_date = db.Column(db.String(100), default=datetime.utcnow().strftime("%Y-%m-%d"))
 
     # define the one-to-many relationship

@@ -39,6 +39,6 @@ if __name__ == "__main__":
         start_date=datetime.now().replace(hour=9, minute=0, second=0, microsecond=0),
     )
     scheduler.start()
-    # scheduler.add_job(id="Scheduled scrape", func=scrape, trigger="interval", seconds=5)
-    # scheduler.start()
+    scheduler.add_job(id="Scheduled scrape", func=scrape, trigger="interval", seconds=5)
+    scheduler.start()
     app.run()

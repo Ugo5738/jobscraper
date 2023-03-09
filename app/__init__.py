@@ -1,17 +1,7 @@
-import time
-
-import click
 from flask import Flask
-from flask.cli import with_appcontext
 
 from app.custom_classes import MyModelView, PostAdminView
 from app.extensions import admin, db, login_manager, migrate
-from app.main import (
-    justremote_scraper,
-    remote_co_scraper,
-    remote_io_scraper,
-    upstaff_scraper,
-)
 from app.models.admin import admin_models
 from app.models.postings import posts
 from config import Config
@@ -31,32 +21,6 @@ def create_app(config_class=Config):
     @login_manager.user_loader
     def load_user(user_id):
         return admin_models.User.query.get(int(user_id))
-
-    @click.command(name="scrape")
-    @with_appcontext
-    def scrape():
-        """
-        function to scrape remoteco, remoteio, upstaff for:
-        - job_title
-        - job_company_name
-        - job_tags
-        - job_description_dict
-        - location
-        - category
-        - salary_range
-        """
-
-        print("Scrape started...")
-        result1 = remote_io_scraper.scrape_remote_io()
-        print(result1)
-        time.sleep(10)
-        result2 = remote_co_scraper.scrape_remote_co()
-        print(result2)
-        time.sleep(10)
-        result3 = upstaff_scraper.scrape_upstaff()
-        print(result3)
-        time.sleep(10)
-        print("...Scraped")
 
     # Register blueprints
     from app.auth import bp as auth_bp
@@ -92,8 +56,6 @@ def create_app(config_class=Config):
             menu_icon_value="fa-database",
         )
     )
-
-    app.cli.add_command(scrape)
 
     with app.app_context():
         db.create_all()

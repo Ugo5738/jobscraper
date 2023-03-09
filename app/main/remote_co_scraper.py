@@ -53,9 +53,14 @@ def scrape_remote_co():
     for job in jobs:
         tags = job.find_all("span", {"class": "badge"})
         if any("International" in tag.text for tag in tags):
-            link = job["href"]
-            link = WEB_URL + link
-            job_links.append(link)
+            date_str = job.find("date").text
+            # include minutes in this logic
+            if "hours" in date_str:
+                link = job["href"]
+                link = WEB_URL + link
+                job_links.append(link)
+            elif "days" in date_str:
+                print("there is days in this job card")
 
     for i in range(len(job_links)):
         link = job_links[i]
@@ -78,7 +83,7 @@ def scrape_remote_co():
             if text:
                 job_description_dict[element.tag_name] = text  # solve the issue of not having duplicate keys
                 job_description_text += f"{text} \n\n"
-        posted_date = driver.find_element(By.XPATH, "//time").text.split("Posted: ")[1]
+        posted_time = driver.find_element(By.XPATH, "//time").text.split("Posted: ")[1]
         location = (
             driver.find_element(By.CLASS_NAME, "location_sm")
             .find_element(By.CLASS_NAME, "col-10")
@@ -95,7 +100,7 @@ def scrape_remote_co():
             location=location,
             # category=category,
             # salary_range=salary_range,
-            post_date=posted_date,
+            post_time=posted_time,
         )
 
         db.session.add(post)
@@ -107,18 +112,18 @@ def scrape_remote_co():
 
         db.session.commit()
 
-        one_job_dict = {}
-        one_job_dict["Job Title"] = title
-        one_job_dict["Job Company Name"] = job_company_name
-        one_job_dict["Job Tags"] = job_tags
-        one_job_dict["Logo"] = logo_url
-        one_job_dict["Job Description"] = job_description
-        one_job_dict["Location"] = location
-        # one_job_dict["Category"] = category
-        # one_job_dict["Salary Range"] = salary_range
-        one_job_dict["Posted Date"] = posted_date
+        #     one_job_dict = {}
+        #     one_job_dict["Job Title"] = title
+        #     one_job_dict["Job Company Name"] = job_company_name
+        #     one_job_dict["Job Tags"] = job_tags
+        #     one_job_dict["Logo"] = logo_url
+        #     one_job_dict["Job Description"] = job_description
+        #     one_job_dict["Location"] = location
+        #     # one_job_dict["Category"] = category
+        #     # one_job_dict["Salary Range"] = salary_range
+        #     one_job_dict["Posted Date"] = posted_time
 
-        jobs_dict[f"job_{i+1}"] = one_job_dict
+        #     jobs_dict[f"job_{i+1}"] = one_job_dict
 
         # Click on the next link, unless this is the last link in the list
         if i < len(job_links) - 1:
@@ -127,10 +132,8 @@ def scrape_remote_co():
             time.sleep(2)  # Add a delay to allow the page to load
 
     driver.quit()
-    # return "done"
-    return jobs_dict
+    return "done"
+    # return jobs_dict
 
 
-# print("Ending...")
-# driver.quit()
-# print("Ended!")
+# scrape_remote_co()

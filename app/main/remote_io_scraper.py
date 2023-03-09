@@ -1,4 +1,5 @@
 import os
+import sys
 import time
 from pathlib import Path
 
@@ -13,14 +14,26 @@ from app import db
 from app.models.postings import posts
 
 
+def check_block_element(driver):
+    blocking_element = WebDriverWait(driver, 5).until(
+        EC.presence_of_element_located((By.CSS_SELECTOR, ".jsx-3911492254"))
+    )
+    # click the button to cancel the blocking element
+    cancel_button = blocking_element.find_element(
+        By.CSS_SELECTOR, "[data-modal-close-target='modal-alert-subscribe']"
+    )
+    cancel_button.click()
+
+
 def scrape_remote_io():
+    job_links = []
     jobs_dict = {}
     job_description_dict = {}
     job_description_text = ""
 
     BASE_DIR = Path(__file__).resolve().parent.parent
     DRIVER_PATH = os.path.join(BASE_DIR, "chromedriver.exe")
-    WEB_URL = "https://www.remote.io/"
+    WEB_URL = "https://www.remote.io"
 
     options = Options()
     # options.add_argument("--headless")
@@ -28,23 +41,14 @@ def scrape_remote_io():
     driver = webdriver.Chrome(service=service, options=options)
     driver.get(WEB_URL)
     # check if the blocking element exists
-    try:
-        blocking_element = WebDriverWait(driver, 5).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, ".jsx-3911492254"))
-        )
-        # click the button to cancel the blocking element
-        cancel_button = blocking_element.find_element_by_css_selector(
-            "[data-modal-close-target='modal-alert-subscribe']"
-        )
-        cancel_button.click()
-    except:
-        pass
+
     # Find the search box
     select_element = WebDriverWait(driver, 2).until(
-        EC.presence_of_element_located((By.ID, "job-search-category"))
+        EC.element_to_be_clickable((By.ID, "job-search-category"))
     )
-    select_element.click()
+    driver.execute_script("arguments[0].click();", select_element)
 
+    # INCLUDE "Data"
     # Input Software Development into the search box to find related jobs
     option_element = WebDriverWait(driver, 2).until(
         EC.presence_of_element_located((By.CSS_SELECTOR, "option[value='software-development']"))
@@ -57,16 +61,24 @@ def scrape_remote_io():
     )
     anywhere_button.click()
 
-    # Get all the job links on that page
-    job_links = []
-    col_div = driver.find_element(By.CLASS_NAME, "col-span-12.space-y-4")
-    elements = col_div.find_elements(
-        By.XPATH, "//div[@onclick and starts-with(@onclick, 'window.location=')]"
+    # Get all the job cards on that page
+    job_cards = driver.find_elements(
+        By.XPATH,
+        "//div[@class='lg:flex shadow-singlePost hover:bg-gray-600 items-center hidden px-5 py-3 space-x-6 bg-white rounded-md cursor-pointer relative']",
     )
-    for element in elements:
-        link = element.get_attribute("onclick")
-        link = link.replace("window.location='/", WEB_URL).replace("'", "")
-        job_links.append(link)
+
+    # Loop through each job card
+    for job_card in job_cards:
+        # Check if the time span element contains "h" and exclude the ones that have "d"
+        time_span = job_card.find_element(
+            By.XPATH, "//span[@class='font-500 bottom-3 right-3 absolute text-xs leading-none text-gray-400']"
+        )
+        # include minutes in this logic
+        if "h" in time_span.text and "d" not in time_span.text:
+            # Get the job link from the job card
+            job_link = job_card.get_attribute("onclick")
+            job_link = job_link.split("'")[1]  # Extract the link from the string
+            job_links.append(f"{WEB_URL}{job_link}")
 
     for i in range(len(job_links)):
         link = job_links[i]
@@ -104,7 +116,9 @@ def scrape_remote_io():
         category = category_element.text
 
         posted_element = job_description_element.find_element(By.XPATH, "//li[contains(p/text(),'posted')]")
-        posted_date = posted_element.text.split(" ")[0].split("\n")[-1]
+        # if posted_element.text.split(" ")[1] == "days":
+        #     continue
+        posted_time = posted_element.text.split(" ")[0].split("\n")[-1]
 
         try:
             salary_element = job_description_element.find_element(
@@ -125,7 +139,7 @@ def scrape_remote_io():
             location=location,
             category=category,
             salary_range=salary_range,
-            post_date=posted_date,
+            post_time=posted_time,
         )
 
         db.session.add(post)
@@ -137,18 +151,18 @@ def scrape_remote_io():
 
         db.session.commit()
 
-        one_job_dict = {}
-        one_job_dict["Job Title"] = job_title
-        one_job_dict["Job Company Name"] = job_company_name
-        one_job_dict["Job Tags"] = job_tags
-        one_job_dict["Logo"] = logo_url
-        one_job_dict["Location"] = location
-        one_job_dict["Category"] = category
-        one_job_dict["Salary Range"] = salary_range
-        one_job_dict["Posted Date"] = posted_date
-        one_job_dict["Job Description"] = job_description_dict
+        # one_job_dict = {}
+        # one_job_dict["Job Title"] = job_title
+        # one_job_dict["Job Company Name"] = job_company_name
+        # one_job_dict["Job Tags"] = job_tags
+        # one_job_dict["Logo"] = logo_url
+        # one_job_dict["Location"] = location
+        # one_job_dict["Category"] = category
+        # one_job_dict["Salary Range"] = salary_range
+        # one_job_dict["Posted Date"] = posted_time
+        # one_job_dict["Job Description"] = job_description_dict
 
-        jobs_dict[f"job_{i+1}"] = one_job_dict
+        # jobs_dict[f"job_{i+1}"] = one_job_dict
 
         # Click on the next link, unless this is the last link in the list
         if i < len(job_links) - 1:
@@ -158,9 +172,9 @@ def scrape_remote_io():
 
     time.sleep(5)
     driver.quit()
-    # return "done"
 
-    return jobs_dict
+    return "done"
+    # return jobs_dict
 
 
-# print(jobs_dict)
+# scrape_remote_io()
