@@ -32,13 +32,13 @@ scheduler = BackgroundScheduler()
 
 
 if __name__ == "__main__":
-    scheduler.add_job(
-        scrape,
-        "interval",
-        days=1,
-        start_date=datetime.now().replace(hour=9, minute=0, second=0, microsecond=0),
-    )
-    scheduler.start()
-    # scheduler.add_job(id="Scheduled scrape", func=scrape, trigger="interval", seconds=5)
+    # scheduler.add_job(
+    #     scrape,
+    #     "interval",
+    #     days=1,
+    #     start_date=datetime.now().replace(hour=9, minute=0, second=0, microsecond=0),
+    # )
     # scheduler.start()
+    scheduler.add_job(id="Scheduled scrape", func=scrape, trigger="interval", seconds=180)
+    scheduler.start()
     app.run()
