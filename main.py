@@ -29,6 +29,7 @@ def scrape():
         result3 = upstaff_scraper.scrape_upstaff()
         print(result3)
         time.sleep(10)
+        print("testing this out")
         print("...Scraped")
         pass
     except Exception as e:
