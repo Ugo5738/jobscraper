@@ -1,3 +1,4 @@
+import logging
 import time
 from datetime import datetime
 
@@ -11,21 +12,27 @@ from app.main import (
     upstaff_scraper,
 )
 
+logging.basicConfig(level=logging.ERROR)
+
 app = create_app()
 
 
 def scrape():
-    print("Scrape started...")
-    result1 = remote_co_scraper.scrape_remote_co()
-    print(result1)
-    time.sleep(10)
-    result2 = remote_io_scraper.scrape_remote_io()
-    print(result2)
-    time.sleep(10)
-    result3 = upstaff_scraper.scrape_upstaff()
-    print(result3)
-    time.sleep(10)
-    print("...Scraped")
+    try:
+        print("Scrape started...")
+        result1 = remote_co_scraper.scrape_remote_co()
+        print(result1)
+        time.sleep(10)
+        result2 = remote_io_scraper.scrape_remote_io()
+        print(result2)
+        time.sleep(10)
+        result3 = upstaff_scraper.scrape_upstaff()
+        print(result3)
+        time.sleep(10)
+        print("...Scraped")
+        pass
+    except Exception as e:
+        logging.error(str(e))
 
 
 scheduler = BackgroundScheduler()
