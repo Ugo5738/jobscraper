@@ -94,21 +94,21 @@ def scrape_upstaff():
 
         jobs_dict[title] = job_description_text
 
-        # new_post = posts.Post(
-        #     website_name="Up2staff",
-        #     job_title=title,
-        #     job_company_name=job_company_name,
-        #     # job_tags=job_tags,
-        #     logo_url=logo_url,
-        #     job_description=job_description_text,
-        #     location=location,
-        #     category=category,
-        #     # salary_range=salary_range,
-        #     post_time=date_dict[link],
-        # )
+        new_post = posts.Post(
+            website_name="Up2staff",
+            job_title=title,
+            job_company_name=job_company_name,
+            # job_tags=job_tags,
+            logo_url=logo_url,
+            job_description=job_description_text,
+            location=location,
+            category=category,
+            # salary_range=salary_range,
+            post_time=date_dict[link],
+        )
 
-        # db.session.add(new_post)
-        # db.session.commit()
+        db.session.add(new_post)
+        db.session.commit()
 
         one_job_dict["Title"] = title
         one_job_dict["Job Company Name"] = job_company_name
